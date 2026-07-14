@@ -1,8 +1,5 @@
 import { Song } from "@/types/song";
 
-/* This is dummy data for now. Replace this with actual data from a database later. */
-/* Possible data: https://musicbrainz.org/ */
-
 export const songs: Song[] = [
     {
         id: "1",
@@ -36,5 +33,27 @@ export const songs: Song[] = [
         energy: 0.45,
         danceability: 0.52,
         valence: 0.81,
+    },
+    {
+        id: "4",
+        title: "After Hours",
+        artist: "Example Artist 4",
+        bpm: 110,
+        key: "A",
+        mode: "minor",
+        energy: 0.68,
+        danceability: 0.64,
+        valence: 0.31,
+    },
+    {
+        id: "5",
+        title: "Golden Sky",
+        artist: "Example Artist 5",
+        bpm: 128,
+        key: "D",
+        mode: "major",
+        energy: 0.88,
+        danceability: 0.82,
+        valence: 0.91,
     },
 ];
