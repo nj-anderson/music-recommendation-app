@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { songs } from "@/data/songs";
+import type { Song } from "@/types/song";
 
 export default function SongSearch() {
 
     const [search, setSearch] = useState("");
+    const [selectedSong, setSelectedSong] = useState<Song | null>(null);
 
 
     // For every song, check if the title or artist matches the search
@@ -37,12 +39,24 @@ export default function SongSearch() {
             </div>
             <div>
                 {filteredSongs.map((song) => (
-                    <button key={song.id}>
+                    <button
+                        key={song.id}
+                        onClick={() => setSelectedSong(song)}
+                    >
                         <h2>{song.title}</h2>
                         <p>{song.artist}</p>
                     </button>
                 ))}
             </div>
+
+            {/*testing - conditional rendering*/}
+            {selectedSong && (
+                <div>
+                    <h2>Selected Song</h2>
+                    <h3>{selectedSong.title}</h3>
+                    <p>{selectedSong.artist}</p>
+                </div>
+            )}
         </>
     )
 }
