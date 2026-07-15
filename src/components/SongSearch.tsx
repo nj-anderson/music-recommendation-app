@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { songs } from "@/data/songs";
 import type { Song } from "@/types/song";
+import SongProfile from "@/components/SongProfile";
 
 export default function SongSearch() {
 
@@ -29,9 +30,11 @@ export default function SongSearch() {
 
     return (
         <>
+            <br/>
             <div>
                 <input
                     type="text"
+                    style={{ width: "250px" }}
                     placeholder="Search for a song or artist..."
                     value={search}
                     onChange={(event) => setSearch(event.target.value)} // every time the input changes, save its current value in 'search'
@@ -48,14 +51,11 @@ export default function SongSearch() {
                     </button>
                 ))}
             </div>
+            <br/>
 
             {/*testing - conditional rendering*/}
             {selectedSong && (
-                <div>
-                    <h2>Selected Song</h2>
-                    <h3>{selectedSong.title}</h3>
-                    <p>{selectedSong.artist}</p>
-                </div>
+                <SongProfile song={selectedSong} />
             )}
         </>
     )
