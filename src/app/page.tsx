@@ -1,4 +1,3 @@
-import { songs } from "@/data/songs";
 import SongSearch from "@/components/SongSearch";
 
 export default function Home() {

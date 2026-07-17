@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { songs } from "@/data/songs";
 import type { Song } from "@/types/song";
 import SongProfile from "@/components/SongProfile";
 
@@ -40,7 +39,13 @@ export default function SongSearch() {
                     onChange={(event) => setSearch(event.target.value)} // every time the input changes, save its current value in 'search'
                 />
             </div>
-            <div>
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "50px",
+                }}
+            >
                 {filteredSongs.map((song) => (
                     <button
                         key={song.id}
