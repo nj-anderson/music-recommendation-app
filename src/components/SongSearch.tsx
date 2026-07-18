@@ -42,13 +42,32 @@ export default function SongSearch() {
     return (
         <>
             <br/>
-            <div>
+            <div className="flex justify-center mt-10 mb-8">
                 <input
+                    className="
+                    w-full
+                    max-w-xl
+                    rounded-full
+                    bg-black/40
+                    backdrop-blur-md
+                    border
+                    border-white/10
+                    px-6
+                    py-4
+                    text-lg
+                    text-white
+                    placeholder:text-gray-400
+                    outline-none
+                    transition
+                    duration-200
+                    focus:border-pink-400/70
+                    focus:ring-2
+                    focus:ring-pink-400/30 "
+
                     type="text"
-                    style={{ width: "250px" }}
                     placeholder="Search for a song or artist..."
                     value={search}
-                    onChange={(event) => setSearch(event.target.value)} // every time the input changes, save its current value in 'search'
+                    onChange={(event) => setSearch(event.target.value)}
                 />
             </div>
             <div
