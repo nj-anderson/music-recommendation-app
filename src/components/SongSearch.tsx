@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import type { Song } from "@/types/song";
+import songsData from "@/data/songs.json"; // going to be replaces with api route for faster data fetching
 import SongProfile from "@/components/SongProfile";
+import {searchSongs} from "@/lib/search";
+
+const songs = songsData as Song[];
 
 export default function SongSearch() {
 
@@ -10,22 +14,28 @@ export default function SongSearch() {
     const [selectedSong, setSelectedSong] = useState<Song | null>(null);
 
 
+    // OLD VERSION
     // For every song, check if the title or artist matches the search
-    const filteredSongs = songs.filter((song) => {
+    // const filteredSongs = songs.filter((song) => {
+    //
+    //     const searchWords = search.toLowerCase().split(" "); // what the user searched for
+    //
+    //     // make search easier by splitting the title and artist into words instead of just one string
+    //     const titleWords = song.title.toLowerCase().split(" ");
+    //     const artistWords = song.artist.toLowerCase().split(" ");
+    //
+    //     // "does at least one word in the title or artist start with the search term?"
+    //
+    //     return searchWords.every((searchWord) => (
+    //         titleWords.some((word) => word.startsWith(searchWord)) ||
+    //         artistWords.some((word) => word.startsWith(searchWord))
+    //     ));
+    // });
 
-        const searchWords = search.toLowerCase().split(" "); // what the user searched for
-
-        // make search easier by splitting the title and artist into words instead of just one string
-        const titleWords = song.title.toLowerCase().split(" ");
-        const artistWords = song.artist.toLowerCase().split(" ");
-
-        // "does at least one word in the title or artist start with the search term?"
-
-        return searchWords.every((searchWord) => (
-            titleWords.some((word) => word.startsWith(searchWord)) ||
-            artistWords.some((word) => word.startsWith(searchWord))
-        ));
-    });
+    const filteredSongs = searchSongs(
+        songs,
+        search
+    );
 
     return (
         <>
