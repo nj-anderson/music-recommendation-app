@@ -19,7 +19,6 @@ export function searchSongs(
         const artistWords = song.artist
             .toLowerCase()
             .split(/\s+/);
-
         return searchWords.every((searchWord) =>
             titleWords.some((word) =>
                 word.startsWith(searchWord)
@@ -28,5 +27,7 @@ export function searchSongs(
                 word.startsWith(searchWord)
             )
         );
-    });
+    })
+        .sort((a, b) => b.popularity - a.popularity) // makes more popular songs appear first
+        .slice(0, 20); // limits the number of results to 20
 }
