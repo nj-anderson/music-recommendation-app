@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import type { Song } from "@/types/song";
 import SongProfile from "@/components/SongProfile";
 
+type SongWithArtwork = Song & {
+    artwork?: string | null;
+};
 
 export default function SongSearch() {
 
     const [search, setSearch] = useState(""); // what the user searches for
     const [selectedSong, setSelectedSong] = useState<Song | null>(null); // the song that the user has selected by clicking on it
-    const [filteredSongs, setFilteredSongs] = useState<Song[]>([]); // the filtered songs (20 most popular) based on the search query
+    const [filteredSongs, setFilteredSongs] = useState<SongWithArtwork[]>([]); // the filtered songs (20 most popular) based on the search query
     const [debouncedSearch, setDebouncedSearch] = useState(""); // the search query that is debounced to avoid unnecessary API calls (this is what actually gets sent to the API)
 
     // fetches filtered songs search results from API
@@ -28,7 +31,29 @@ export default function SongSearch() {
 
             const songs: Song[] = await response.json();
 
-            setFilteredSongs(songs);
+            const songsWithArtwork = await Promise.all(
+                songs.map(async (song) => {
+                    try {
+                        const res = await fetch(
+                            `/api/artwork?title=${encodeURIComponent(song.title)}&artist=${encodeURIComponent(song.artist)}`
+                        );
+
+                        const data = await res.json();
+
+                        return {
+                            ...song,
+                            artwork: data.artwork,
+                        };
+                    } catch {
+                        return {
+                            ...song,
+                            artwork: null,
+                        };
+                    }
+                })
+            );
+
+            setFilteredSongs(songsWithArtwork);
         }
 
         fetchSongs();
@@ -77,30 +102,42 @@ export default function SongSearch() {
                     onChange={(event) => setSearch(event.target.value)}
                 />
             </div>
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="mt-8 px-10 py-5 grid grid-cols-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-4">
                 {filteredSongs.map((song) => (
                     <button
                         key={song.id}
                         onClick={() => setSelectedSong(song)}
                         className="
-                rounded-xl
-                bg-white/5
-                border border-white/10
-                p-4
-                text-left
-                backdrop-blur-md
-                transition
-                hover:bg-white/10
-                hover:scale-105
-            "
+                        rounded-2xl
+                        overflow-hidden
+                        bg-white/5
+                        backdrop-blur-md
+                        border border-white/10
+                        hover:bg-white/10
+                        transition
+                        text-left"
                     >
-                        <h2 className="font-semibold text-lg truncate">
-                            {song.title}
-                        </h2>
 
-                        <p className="mt-1 text-sm text-gray-300 truncate">
-                            {song.artist.split(";").join(", ")}
-                        </p>
+                        {song.artwork ? (
+                            <img
+                                src={song.artwork}
+                                alt={song.title}
+                                className="w-full aspect-square object-cover"
+                            />
+                        ) : (
+                            <div className="w-full aspect-square bg-white/10" />
+                        )}
+
+                        <div className="p-4">
+                            <h2 className="font-semibold truncate">
+                                {song.title}
+                            </h2>
+
+                            <p className="text-sm text-gray-300 truncate">
+                                {song.artist.split(";").join(", ")}
+                            </p>
+                        </div>
+
                     </button>
                 ))}
             </div>
