@@ -19,7 +19,7 @@ export default function Home() {
             </div>
 
             {/*title*/}
-            <div className="relative z-10">
+            <div className="relative z-10 pt-30">
                 <h1 className="text-6xl font-bold text-center mt-20">
                     Music Discovery
                 </h1>

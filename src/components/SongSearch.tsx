@@ -102,22 +102,25 @@ export default function SongSearch() {
                     onChange={(event) => setSearch(event.target.value)}
                 />
             </div>
-            <div className="mt-8 px-10 py-5 grid grid-cols-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-4">
+
+            <div className="mt-10 flex flex-wrap justify-center gap-6">
                 {filteredSongs.map((song) => (
                     <button
                         key={song.id}
                         onClick={() => setSelectedSong(song)}
                         className="
-                        rounded-2xl
-                        overflow-hidden
-                        bg-white/5
-                        backdrop-blur-md
-                        border border-white/10
-                        hover:bg-white/10
-                        transition
-                        text-left"
+                            w-52
+                            rounded-2xl
+                            overflow-hidden
+                            bg-white/5
+                            backdrop-blur-md
+                            border border-white/10
+                            shadow-lg
+                            hover:shadow-pink-500/20
+                            hover:scale-105
+                            transition-all
+                            duration-200"
                     >
-
                         {song.artwork ? (
                             <img
                                 src={song.artwork}
@@ -129,15 +132,14 @@ export default function SongSearch() {
                         )}
 
                         <div className="p-4">
-                            <h2 className="font-semibold truncate">
+                            <h2 className="font-semibold text-lg truncate">
                                 {song.title}
                             </h2>
 
-                            <p className="text-sm text-gray-300 truncate">
+                            <p className="mt-1 text-sm text-gray-300 truncate">
                                 {song.artist.split(";").join(", ")}
                             </p>
                         </div>
-
                     </button>
                 ))}
             </div>
