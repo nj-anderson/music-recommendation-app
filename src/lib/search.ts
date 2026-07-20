@@ -29,5 +29,5 @@ export function searchSongs(
         );
     })
         .sort((a, b) => b.popularity - a.popularity) // makes more popular songs appear first
-        .slice(0, 20); // limits the number of results to 20
+        .slice(0, 12); // limits the number of results to 20
 }

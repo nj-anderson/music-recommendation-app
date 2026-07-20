@@ -15,6 +15,13 @@ export default function SongSearch() {
     // fetches filtered songs search results from API
     useEffect(() => {
         async function fetchSongs() {
+
+            // early return so that no results show before the user begins searching
+            if (!debouncedSearch.trim()) {
+                setFilteredSongs([]);
+                return;
+            }
+
             const response = await fetch(
                 `/api/search?q=${encodeURIComponent(debouncedSearch)}`
             );
@@ -70,20 +77,30 @@ export default function SongSearch() {
                     onChange={(event) => setSearch(event.target.value)}
                 />
             </div>
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "50px",
-                }}
-            >
+            <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {filteredSongs.map((song) => (
                     <button
                         key={song.id}
                         onClick={() => setSelectedSong(song)}
+                        className="
+                rounded-xl
+                bg-white/5
+                border border-white/10
+                p-4
+                text-left
+                backdrop-blur-md
+                transition
+                hover:bg-white/10
+                hover:scale-105
+            "
                     >
-                        <h2>{song.title}</h2>
-                        <p>{song.artist}</p>
+                        <h2 className="font-semibold text-lg truncate">
+                            {song.title}
+                        </h2>
+
+                        <p className="mt-1 text-sm text-gray-300 truncate">
+                            {song.artist.split(";").join(", ")}
+                        </p>
                     </button>
                 ))}
             </div>
