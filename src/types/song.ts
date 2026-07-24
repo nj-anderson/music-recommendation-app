@@ -18,4 +18,6 @@ export type Song = {
     valence: number;
 
     durationMs: number;
+
+    artwork?: string | null;
 };

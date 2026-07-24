@@ -4,15 +4,11 @@ import { useEffect, useState } from "react";
 import type { Song } from "@/types/song";
 import SongProfile from "@/components/SongProfile";
 
-type SongWithArtwork = Song & {
-    artwork?: string | null;
-};
-
 export default function SongSearch() {
 
     const [search, setSearch] = useState(""); // what the user searches for
     const [selectedSong, setSelectedSong] = useState<Song | null>(null); // the song that the user has selected by clicking on it
-    const [filteredSongs, setFilteredSongs] = useState<SongWithArtwork[]>([]); // the filtered songs (20 most popular) based on the search query
+    const [filteredSongs, setFilteredSongs] = useState<Song[]>([]); // the filtered songs (20 most popular) based on the search query
     const [debouncedSearch, setDebouncedSearch] = useState(""); // the search query that is debounced to avoid unnecessary API calls (this is what actually gets sent to the API)
 
     // fetches filtered songs search results from API
@@ -31,7 +27,8 @@ export default function SongSearch() {
 
             const songs: Song[] = await response.json();
 
-            const songsWithArtwork = await Promise.all(
+            // fetch album artwork for each song
+            const updatedSongs = await Promise.all(
                 songs.map(async (song) => {
                     try {
                         const res = await fetch(
@@ -53,10 +50,10 @@ export default function SongSearch() {
                 })
             );
 
-            setFilteredSongs(songsWithArtwork);
+            setFilteredSongs(updatedSongs);
         }
 
-        fetchSongs();
+        void fetchSongs();
     }, [debouncedSearch]);
 
     // debounces the search query
@@ -73,7 +70,6 @@ export default function SongSearch() {
 
     return (
         <>
-            <br/>
             <div className="flex justify-center mt-10 mb-8">
                 <input
                     className="
@@ -99,7 +95,10 @@ export default function SongSearch() {
                     type="text"
                     placeholder="Search for a song or artist..."
                     value={search}
-                    onChange={(event) => setSearch(event.target.value)}
+                    onChange={(event) => {
+                        setSearch(event.target.value);
+                        setSelectedSong(null);
+                    }} // every time the input changes, save its current value in 'search'
                 />
             </div>
 
@@ -107,7 +106,11 @@ export default function SongSearch() {
                 {filteredSongs.map((song) => (
                     <button
                         key={song.id}
-                        onClick={() => setSelectedSong(song)}
+                        onClick={() => {
+                            setSelectedSong(song);
+                            setFilteredSongs([]);
+                            setSearch("");
+                        }}
                         className="
                             w-52
                             rounded-2xl
@@ -143,12 +146,13 @@ export default function SongSearch() {
                     </button>
                 ))}
             </div>
-            <br/>
 
-            {/*testing - conditional rendering*/}
+            {/* conditional rendering */}
             {selectedSong && (
-                <SongProfile song={selectedSong} />
+                <div className="mt-12 flex justify-center">
+                    <SongProfile song={selectedSong} />
+                </div>
             )}
         </>
-    )
+    );
 }

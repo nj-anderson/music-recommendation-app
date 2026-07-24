@@ -20,7 +20,7 @@ export default function Home() {
 
             {/*title*/}
             <div className="relative z-10 pt-30">
-                <h1 className="text-6xl font-bold text-center mt-20">
+                <h1 className="text-6xl font-bold text-center ">
                     Music Discovery
                 </h1>
                 <h2 className=" text-2xl text-center mt-5">
@@ -29,7 +29,7 @@ export default function Home() {
             </div>
 
             {/*search tool*/}
-            <div className="relative z-10">
+            <div className="relative z-10 mt-10">
                 <SongSearch />
             </div>
 
