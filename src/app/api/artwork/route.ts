@@ -5,7 +5,10 @@ export async function GET(request: NextRequest) {
     const artist = request.nextUrl.searchParams.get("artist");
 
     if (!title || !artist) {
-        return NextResponse.json({ artwork: null });
+        return NextResponse.json({
+            artwork: null,
+            preview: null,
+        });
     }
 
     const term = encodeURIComponent(`${title} ${artist}`);
@@ -17,13 +20,23 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
 
     if (data.resultCount === 0) {
-        return NextResponse.json({ artwork: null });
+        return NextResponse.json({
+            artwork: null,
+            preview: null,
+        });
     }
 
-    const artwork = data.results[0].artworkUrl100.replace(
+    const result = data.results[0];
+
+    const artwork = result.artworkUrl100?.replace(
         "100x100",
         "600x600"
-    );
+    ) ?? null;
 
-    return NextResponse.json({ artwork });
+    const preview = result.previewUrl ?? null;
+
+    return NextResponse.json({
+        artwork,
+        preview,
+    });
 }

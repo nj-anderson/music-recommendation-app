@@ -10,7 +10,8 @@ export default function SongSearch() {
     const [selectedSong, setSelectedSong] = useState<Song | null>(null); // the song that the user has selected by clicking on it
     const [filteredSongs, setFilteredSongs] = useState<Song[]>([]); // the filtered songs (20 most popular) based on the search query
     const [debouncedSearch, setDebouncedSearch] = useState(""); // the search query that is debounced to avoid unnecessary API calls (this is what actually gets sent to the API)
-    const [recommendations, setRecommendations] = useState<Song[]>([]);
+    const [recommendations, setRecommendations] = useState<Song[]>([]); // stores the recommendations for the selected song
+    const [currentPreview, setCurrentPreview] = useState<string | null>(null); // stores the URL of the current preview audio file
 
     // fetches filtered songs search results from API
     useEffect(() => {
@@ -41,11 +42,13 @@ export default function SongSearch() {
                         return {
                             ...song,
                             artwork: data.artwork,
+                            preview: data.preview,
                         };
                     } catch {
                         return {
                             ...song,
                             artwork: null,
+                            preview: null,
                         };
                     }
                 })
@@ -98,11 +101,13 @@ export default function SongSearch() {
                     return {
                         ...song,
                         artwork: data.artwork,
+                        preview: data.preview,
                     };
                 } catch {
                     return {
                         ...song,
                         artwork: null,
+                        preview: null,
                     };
                 }
             })
@@ -201,6 +206,19 @@ export default function SongSearch() {
                 </div>
             )}
 
+            {/*audio player*/}
+            {currentPreview && (
+                <div className="flex justify-center mt-8">
+                    <audio
+                        controls
+                        autoPlay
+                        src={currentPreview}
+                        className="w-full max-w-lg"
+                    />
+                </div>
+            )}
+
+            {/*displays the recommendations for the selected song*/}
             {recommendations.length > 0 && (
                 <div className="mt-12">
                     <h2 className="mb-6 text-center text-3xl font-bold">
@@ -240,6 +258,45 @@ export default function SongSearch() {
                                         {song.artist.split(";").join(", ")}
                                     </p>
                                 </div>
+
+                                {song.preview ? (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setCurrentPreview(song.preview!);
+                                        }}
+                                        className="
+                                                mt-4
+                                                w-full
+                                                rounded-lg
+                                                bg-gradient-to-r
+                                                from-[#6366F1]
+                                                to-[#EC4899]
+                                                py-2
+                                                font-medium
+                                                text-white
+                                                transition
+                                                hover:opacity-90
+                                            "
+                                    >
+                                        ▶ Preview
+                                    </button>
+                                ) : (
+                                    <button
+                                        disabled
+                                        className="
+                                                mt-4
+                                                w-full
+                                                rounded-lg
+                                                bg-white/10
+                                                py-2
+                                                text-gray-400
+                                                cursor-not-allowed
+                                            "
+                                    >
+                                        Preview Unavailable
+                                    </button>
+                                )}
                             </div>
                         ))}
                     </div>

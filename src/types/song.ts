@@ -20,4 +20,5 @@ export type Song = {
     durationMs: number;
 
     artwork?: string | null;
+    preview?: string | null;
 };
