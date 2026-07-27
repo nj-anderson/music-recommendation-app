@@ -3,9 +3,10 @@ import Stat from "@/components/Stat";
 
 type Props = {
     song: Song;
+    onGenerateRecommendations: () => void;
 };
 
-export default function SongProfile({ song }: Props) {
+export default function SongProfile({ song, onGenerateRecommendations }: Props) {
     return (
         <div className="mb-12 flex justify-center">
             <div
@@ -101,6 +102,7 @@ export default function SongProfile({ song }: Props) {
                                 duration-300
                                 hover:bg-[#3e3547]
                             "
+                            onClick={onGenerateRecommendations}
                         >
                             ✨ Generate Recommendations
                         </button>

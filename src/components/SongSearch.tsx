@@ -10,6 +10,7 @@ export default function SongSearch() {
     const [selectedSong, setSelectedSong] = useState<Song | null>(null); // the song that the user has selected by clicking on it
     const [filteredSongs, setFilteredSongs] = useState<Song[]>([]); // the filtered songs (20 most popular) based on the search query
     const [debouncedSearch, setDebouncedSearch] = useState(""); // the search query that is debounced to avoid unnecessary API calls (this is what actually gets sent to the API)
+    const [recommendations, setRecommendations] = useState<Song[]>([]);
 
     // fetches filtered songs search results from API
     useEffect(() => {
@@ -66,6 +67,49 @@ export default function SongSearch() {
         return () => clearTimeout(timer);
 
     }, [search]);
+
+    // button handler that generates recommendations for the selected song
+    async function handleGenerateRecommendations() {
+
+        if (!selectedSong) {
+            return;
+        }
+
+        const response = await fetch("/api/recommend", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(selectedSong),
+        });
+
+        const recommendations: Song[] = await response.json();
+
+        // Fetch album artwork for each recommended song
+        const updatedRecommendations = await Promise.all(
+            recommendations.map(async (song) => {
+                try {
+                    const response = await fetch(
+                        `/api/artwork?title=${encodeURIComponent(song.title)}&artist=${encodeURIComponent(song.artist)}`
+                    );
+
+                    const data = await response.json();
+
+                    return {
+                        ...song,
+                        artwork: data.artwork,
+                    };
+                } catch {
+                    return {
+                        ...song,
+                        artwork: null,
+                    };
+                }
+            })
+        );
+
+        setRecommendations(updatedRecommendations);
+    }
 
 
     return (
@@ -150,7 +194,55 @@ export default function SongSearch() {
             {/* conditional rendering */}
             {selectedSong && (
                 <div className="mt-12 flex justify-center">
-                    <SongProfile song={selectedSong} />
+                    <SongProfile
+                        song={selectedSong}
+                        onGenerateRecommendations={handleGenerateRecommendations}
+                    />
+                </div>
+            )}
+
+            {recommendations.length > 0 && (
+                <div className="mt-12">
+                    <h2 className="mb-6 text-center text-3xl font-bold">
+                        Recommended Songs
+                    </h2>
+
+                    <div className="flex flex-wrap justify-center gap-6">
+                        {recommendations.map((song) => (
+                            <div
+                                key={song.id}
+                                className="
+                        w-52
+                        rounded-2xl
+                        overflow-hidden
+                        bg-white/5
+                        backdrop-blur-md
+                        border border-white/10
+                        shadow-lg
+                    "
+                            >
+                                {song.artwork ? (
+                                    <img
+                                        src={song.artwork}
+                                        alt={song.title}
+                                        className="w-full aspect-square object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full aspect-square bg-white/10" />
+                                )}
+
+                                <div className="p-4">
+                                    <h3 className="font-semibold truncate">
+                                        {song.title}
+                                    </h3>
+
+                                    <p className="text-sm text-gray-300 truncate">
+                                        {song.artist.split(";").join(", ")}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
         </>
