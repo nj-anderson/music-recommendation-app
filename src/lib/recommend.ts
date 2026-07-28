@@ -34,10 +34,10 @@ function similarityScore(song1: Song, song2: Song): number {
     let score = 0;
 
     // Energy - 25% weight
-    score += Math.abs(song1.energy - song2.energy) * 0.3;
+    score += Math.abs(song1.energy - song2.energy) * 0.25;
 
     // Danceability - 25% weight
-    score += Math.abs(song1.danceability - song2.danceability) * 0.3;
+    score += Math.abs(song1.danceability - song2.danceability) * 0.25;
 
     // Valence (Happiness) - 20% weight
     score += Math.abs(song1.valence - song2.valence) * 0.2;

@@ -29,7 +29,7 @@ export default function Home() {
             </div>
 
             {/*search tool*/}
-            <div className="relative z-10 mt-10">
+            <div className="relative z-10 mt-10 mb-50">
                 <SongSearch />
             </div>
 

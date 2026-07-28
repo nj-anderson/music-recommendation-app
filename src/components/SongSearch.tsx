@@ -17,6 +17,7 @@ export default function SongSearch() {
 
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const recommendationsRef = useRef<HTMLDivElement>(null);
 
 
     // fetches filtered songs search results from API
@@ -120,6 +121,13 @@ export default function SongSearch() {
         );
 
         setRecommendations(updatedRecommendations);
+
+        requestAnimationFrame(() => {
+            recommendationsRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        });
     }
 
 
@@ -173,6 +181,12 @@ export default function SongSearch() {
                     onChange={(event) => {
                         setSearch(event.target.value);
                         setSelectedSong(null);
+                        setRecommendations([]);
+                        setPlayingSongId(null);
+
+                        if (audioRef.current) {
+                            audioRef.current.pause();
+                        }
                     }} // every time the input changes, save its current value in 'search'
                 />
             </div>
@@ -235,7 +249,7 @@ export default function SongSearch() {
 
             {/*displays the recommendations for the selected song*/}
             {recommendations.length > 0 && (
-                <div className="mt-12">
+                <div ref={recommendationsRef} className="mt-12">
                     <h2 className="mb-6 text-center text-3xl font-bold">
                         Recommended Songs
                     </h2>
