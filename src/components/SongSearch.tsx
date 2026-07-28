@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { Song } from "@/types/song";
 import SongProfile from "@/components/SongProfile";
+import { Play, Pause } from "lucide-react";
 
 export default function SongSearch() {
 
@@ -11,7 +12,12 @@ export default function SongSearch() {
     const [filteredSongs, setFilteredSongs] = useState<Song[]>([]); // the filtered songs (20 most popular) based on the search query
     const [debouncedSearch, setDebouncedSearch] = useState(""); // the search query that is debounced to avoid unnecessary API calls (this is what actually gets sent to the API)
     const [recommendations, setRecommendations] = useState<Song[]>([]); // stores the recommendations for the selected song
+    const [playingSongId, setPlayingSongId] = useState<string | null>(null);
     const [currentPreview, setCurrentPreview] = useState<string | null>(null); // stores the URL of the current preview audio file
+
+
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
 
     // fetches filtered songs search results from API
     useEffect(() => {
@@ -117,6 +123,26 @@ export default function SongSearch() {
     }
 
 
+    function handlePreview(song: Song) {
+        if (!song.preview) return;
+
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        if (playingSongId === song.id) {
+            audio.pause();
+            setPlayingSongId(null);
+            return;
+        }
+
+        audio.src = song.preview;
+        audio.play();
+
+        setCurrentPreview(song.preview);
+        setPlayingSongId(song.id);
+    }
+
+
     return (
         <>
             <div className="flex justify-center mt-10 mb-8">
@@ -206,17 +232,6 @@ export default function SongSearch() {
                 </div>
             )}
 
-            {/*audio player*/}
-            {currentPreview && (
-                <div className="flex justify-center mt-8">
-                    <audio
-                        controls
-                        autoPlay
-                        src={currentPreview}
-                        className="w-full max-w-lg"
-                    />
-                </div>
-            )}
 
             {/*displays the recommendations for the selected song*/}
             {recommendations.length > 0 && (
@@ -259,49 +274,64 @@ export default function SongSearch() {
                                     </p>
                                 </div>
 
-                                {song.preview ? (
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setCurrentPreview(song.preview!);
-                                        }}
-                                        className="
-                                                mt-4
-                                                w-full
-                                                rounded-lg
-                                                bg-gradient-to-r
-                                                from-[#6366F1]
-                                                to-[#EC4899]
-                                                py-2
-                                                font-medium
-                                                text-white
-                                                transition
-                                                hover:opacity-90
-                                            "
-                                    >
-                                        ▶ Preview
-                                    </button>
-                                ) : (
-                                    <button
-                                        disabled
-                                        className="
-                                                mt-4
-                                                w-full
+
+                                <div className="mt-1 flex justify-center">
+                                    {song.preview ? (
+                                        <div className="mb-4">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handlePreview(song);
+                                            }}
+                                            className="
+                                                flex
+                                                h-14
+                                                w-24
+                                                items-center
+                                                justify-center
                                                 rounded-lg
                                                 bg-white/10
-                                                py-2
-                                                text-gray-400
-                                                cursor-not-allowed
+                                                text-white
+                                                transition-all
+                                                hover:scale-105
                                             "
-                                    >
-                                        Preview Unavailable
-                                    </button>
-                                )}
+                                        >
+                                            {playingSongId === song.id ? (
+                                                <Pause className="h-6 w-6 fill-white" />
+                                            ) : (
+                                                <Play className="ml-1 h-6 w-6 fill-white" />
+                                            )}
+                                        </button>
+                            </div>
+                                    ) : (
+                                        <div className="mt-1.5">
+                                        <button
+                                            disabled
+                                            className="
+                                            rounded-lg
+                                            bg-white/10
+                                            px-4
+                                            py-3
+                                            text-gray-400
+                                            cursor-not-allowed
+                                        "
+                                        >
+                                            Preview Unavailable
+                                        </button>
+                                        </div>
+                                    )}
+                                </div>
+
                             </div>
                         ))}
                     </div>
                 </div>
             )}
+            <audio
+                ref={audioRef}
+                hidden
+                onEnded={() => setPlayingSongId(null)}
+            />
         </>
     );
 }
