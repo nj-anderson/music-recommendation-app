@@ -31,6 +31,30 @@ const KEY_NAMES = [
     "B",
 ];
 
+const EXCLUDED_GENRES = new Set([
+    "indian",
+    "indian classical",
+    "indian instrumental",
+    "indian folk",
+    "indian indie",
+    "indian rock",
+    "indian lo-fi",
+    "indian hip hop",
+    "desi",
+    "bollywood",
+    "filmi",
+    "ghazal",
+    "bhajan",
+    "punjabi",
+    "tamil",
+    "telugu",
+    "malayalam",
+    "kannada",
+    "bengali",
+    "gujarati",
+    "marathi",
+]);
+
 const songs: Song[] = [];
 
 const seenSongs = new Set<string>();
@@ -42,6 +66,10 @@ fs.createReadStream(inputPath)
         const identifier = `${row.track_name}|${row.artists}`;
 
         if (seenSongs.has(identifier)) {
+            return;
+        }
+
+        if (EXCLUDED_GENRES.has(row.track_genre.toLowerCase())) {
             return;
         }
 

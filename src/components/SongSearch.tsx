@@ -40,6 +40,9 @@ export default function SongSearch() {
             // fetch album artwork for each song
             const updatedSongs = await Promise.all(
                 songs.map(async (song) => {
+
+                    console.log(song);
+
                     try {
                         const res = await fetch(
                             `/api/artwork?title=${encodeURIComponent(song.title)}&artist=${encodeURIComponent(song.artist)}`
@@ -73,7 +76,7 @@ export default function SongSearch() {
 
         const timer = setTimeout(() => {
             setDebouncedSearch(search);
-        }, 300);
+        }, 100);
 
         return () => clearTimeout(timer);
 

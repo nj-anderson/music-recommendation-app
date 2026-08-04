@@ -5,13 +5,14 @@ import csv from "csv-parser";
 const filePath = path.join(
     process.cwd(),
     "data",
-    "spotify-tracks-dataset-detailed.csv"
+    "songs-v2.csv"
 );
 
 let rowCount = 0;
 
 const uniqueSongs = new Set<string>();
 let duplicateCount = 0;
+let missingArtistsCount = 0;
 
 fs.createReadStream(filePath)
     .pipe(csv())
@@ -19,16 +20,20 @@ fs.createReadStream(filePath)
         rowCount++;
 
         const identifier =
-            `${row.track_name}|${row.artists}`;
+            `${row.name}|${row.track_artists}`;
 
         if (uniqueSongs.has(identifier)) {
             duplicateCount++;
         } else {
             uniqueSongs.add(identifier);
         }
+        if (!row.track_artists.trim()) {
+            missingArtistsCount++;
+        }
     })
     .on("end", () => {
         console.log("Rows:", rowCount);
         console.log("Unique Songs:", uniqueSongs.size);
         console.log("Duplicates:", duplicateCount);
+        console.log("Missing Artists:", missingArtistsCount);
     });

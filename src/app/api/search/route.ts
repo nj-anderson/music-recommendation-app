@@ -1,4 +1,4 @@
-import songs from "@/data/songs.json";
+import songs from "@/data/activeData";
 import { searchSongs } from "@/lib/search";
 import type { Song } from "@/types/song";
 

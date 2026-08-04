@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# data too large to be committed
+data/songs-v2.csv
+src/data/songs-v2.json
