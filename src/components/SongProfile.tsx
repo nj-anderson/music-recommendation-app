@@ -104,7 +104,7 @@ export default function SongProfile({ song, onGenerateRecommendations }: Props) 
                             "
                             onClick={onGenerateRecommendations}
                         >
-                            ✨ Generate Recommendations
+                            Generate Recommendations
                         </button>
                     </div>
                 </div>

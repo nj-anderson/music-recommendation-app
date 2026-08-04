@@ -20,7 +20,7 @@ export function recommendSongs(
         .sort((a,b) => a.score - b.score)
 
         // Keep only the top 8 songs
-        .slice(0,8)
+        .slice(0,10)
 
         // Extract the songs from the sorted results
         .map(result => result.song);

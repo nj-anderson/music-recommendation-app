@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import type { Song } from "@/types/song";
 import SongProfile from "@/components/SongProfile";
 import { Play, Pause } from "lucide-react";
+import RecommendationCarousel from "@/components/RecommendationCarousel";
 
 export default function SongSearch() {
 
@@ -154,6 +155,8 @@ export default function SongSearch() {
     return (
         <>
             <div className="flex justify-center mt-10 mb-8">
+
+                {/*SEARCHBAR*/}
                 <input
                     className="
                     w-full
@@ -191,6 +194,7 @@ export default function SongSearch() {
                 />
             </div>
 
+            {/*SONGS DISPLAYING DURING SEARCH*/}
             <div className="mt-10 flex flex-wrap justify-center gap-6">
                 {filteredSongs.map((song) => (
                     <button
@@ -236,7 +240,8 @@ export default function SongSearch() {
                 ))}
             </div>
 
-            {/* conditional rendering */}
+
+            {/* SELECTED SONG PROFILE - conditional rendering */}
             {selectedSong && (
                 <div className="mt-12 flex justify-center">
                     <SongProfile
@@ -247,7 +252,7 @@ export default function SongSearch() {
             )}
 
 
-            {/*displays the recommendations for the selected song*/}
+            {/* RECOMMENDED SONGS - conditional rendering*/}
             {recommendations.length > 0 && (
                 <div ref={recommendationsRef} className="mt-12">
                     <h2 className="mb-6 text-center text-3xl font-bold">
@@ -255,89 +260,13 @@ export default function SongSearch() {
                     </h2>
 
                     <div className="flex flex-wrap justify-center gap-6">
-                        {recommendations.map((song) => (
-                            <div
-                                key={song.id}
-                                className="
-                        w-52
-                        rounded-2xl
-                        overflow-hidden
-                        bg-white/5
-                        backdrop-blur-md
-                        border border-white/10
-                        shadow-lg
-                    "
-                            >
-                                {song.artwork ? (
-                                    <img
-                                        src={song.artwork}
-                                        alt={song.title}
-                                        className="w-full aspect-square object-cover"
-                                    />
-                                ) : (
-                                    <div className="w-full aspect-square bg-white/10" />
-                                )}
 
-                                <div className="p-4">
-                                    <h3 className="font-semibold truncate">
-                                        {song.title}
-                                    </h3>
+                        <RecommendationCarousel
+                            recommendations={recommendations}
+                            playingSongId={playingSongId}
+                            handlePreview={handlePreview}
+                        />
 
-                                    <p className="text-sm text-gray-300 truncate">
-                                        {song.artist.split(";").join(", ")}
-                                    </p>
-                                </div>
-
-
-                                <div className="mt-1 flex justify-center">
-                                    {song.preview ? (
-                                        <div className="mb-4">
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handlePreview(song);
-                                            }}
-                                            className="
-                                                flex
-                                                h-14
-                                                w-24
-                                                items-center
-                                                justify-center
-                                                rounded-lg
-                                                bg-white/10
-                                                text-white
-                                                transition-all
-                                                hover:scale-105
-                                            "
-                                        >
-                                            {playingSongId === song.id ? (
-                                                <Pause className="h-6 w-6 fill-white" />
-                                            ) : (
-                                                <Play className="ml-1 h-6 w-6 fill-white" />
-                                            )}
-                                        </button>
-                            </div>
-                                    ) : (
-                                        <div className="mt-1.5">
-                                        <button
-                                            disabled
-                                            className="
-                                            rounded-lg
-                                            bg-white/10
-                                            px-4
-                                            py-3
-                                            text-gray-400
-                                            cursor-not-allowed
-                                        "
-                                        >
-                                            Preview Unavailable
-                                        </button>
-                                        </div>
-                                    )}
-                                </div>
-
-                            </div>
-                        ))}
                     </div>
                 </div>
             )}
