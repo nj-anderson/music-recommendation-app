@@ -1,6 +1,16 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## About the Project
+
+Music Discovery is a full-stack music recommendation web application using Next.js, React, and TypeScript. The application allows users to search for a song, select it, and receive recommendations based on audio features such as energy, danceability, valence, BPM, key, mode, and genre. I implemented the search and recommendation functionality through API routes so that the large song dataset remains on the server rather than being loaded into the client. I also integrated the iTunes Search API to retrieve album artwork and audio preview clips for songs displayed in the application.
+
+For the recommendation system, I created a similarity algorithm that compares the selected song against songs in the dataset and assigns each song a similarity score based on the differences between their audio features. Songs with the lowest scores are considered the most similar and are returned as recommendations. I also created a reusable Song TypeScript type to define the properties shared across the dataset and application.
+
+The project uses a large Spotify song dataset that was converted from CSV to JSON and processed to remove duplicate songs. The primary resources for continuing development are the project GitHub repository, the dataset files in `src/data`, the recommendation logic in  `src/lib/recommend.ts`, and the API routes in `src/app/api`. Future work should focus on improving the quality and diversity of the dataset, particularly reducing irrelevant/non-English songs and improving coverage of newer music and genres such as hip-hop and rap. Additionally, not all songs consistently return album artwork or audio previews from the iTunes API, so improving the reliability of these results or finding an alternative source for missing artwork and previews would be useful. Finally, it would be great if the application had some sort of explanation to the user as to why the recommendation results were recommended.
+
+
 
 ## Getting Started
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
 
 First, run the development server:
 
