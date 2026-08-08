@@ -1,3 +1,6 @@
+// aurora background
+// this is from React bits - https://reactbits.dev/backgrounds/aurora
+
 "use client"
 
 import { useEffect, useRef } from 'react';

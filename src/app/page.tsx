@@ -5,7 +5,7 @@ export default function Home() {
     return (
         <main className="relative min-h-screen bg-[#0B0814] text-white">
 
-            {/*aurora background*/}
+            {/* aurora background */}
             <div className="fixed inset-0 z-0">
                 <Aurora
                     colorStops={[
@@ -18,7 +18,7 @@ export default function Home() {
                 />
             </div>
 
-            {/*title*/}
+            {/* title */}
             <div className="relative z-10 pt-30">
                 <h1 className="text-6xl font-bold text-center ">
                     Music Discovery
@@ -28,7 +28,7 @@ export default function Home() {
                 </h2>
             </div>
 
-            {/*search tool*/}
+            {/* app functionality - Song Search */}
             <div className="relative z-10 mt-10 mb-50">
                 <SongSearch />
             </div>

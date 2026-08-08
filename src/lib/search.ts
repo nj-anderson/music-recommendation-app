@@ -1,3 +1,6 @@
+// the function that handles searching for songs based on a query
+    // can search by title or artist, order of results is by popularity
+
 import type { Song } from "@/types/song";
 
 export function searchSongs(
@@ -29,5 +32,5 @@ export function searchSongs(
         );
     })
         .sort((a, b) => b.popularity - a.popularity) // makes more popular songs appear first
-        .slice(0, 16); // limits the number of results to 20
+        .slice(0, 16); // limits the number of results to 16
 }

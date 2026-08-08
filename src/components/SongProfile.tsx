@@ -1,3 +1,5 @@
+// song profile component that displays song information of the selected song
+
 import type { Song } from "@/types/song";
 import Stat from "@/components/Stat";
 

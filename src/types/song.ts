@@ -1,3 +1,5 @@
+// the properties of each song in the dataset
+
 export type Song = {
     id: string;
 
@@ -18,6 +20,8 @@ export type Song = {
     valence: number;
 
     durationMs: number;
+
+    country?: string;
 
     artwork?: string | null;
     preview?: string | null;

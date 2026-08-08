@@ -1,3 +1,5 @@
+// stat component that displays a label and a value in a progress bar - used in SongProfile
+
 type Props = {
     label: string;
     value: number;

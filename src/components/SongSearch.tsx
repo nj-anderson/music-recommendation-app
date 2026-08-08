@@ -1,3 +1,5 @@
+// Note for future development: it would probably be wise to break up this component into smaller components, such as SongSearchBar & SongSearchResults
+
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -15,7 +17,6 @@ export default function SongSearch() {
     const [recommendations, setRecommendations] = useState<Song[]>([]); // stores the recommendations for the selected song
     const [playingSongId, setPlayingSongId] = useState<string | null>(null);
     const [currentPreview, setCurrentPreview] = useState<string | null>(null); // stores the URL of the current preview audio file
-
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const recommendationsRef = useRef<HTMLDivElement>(null);
@@ -134,7 +135,7 @@ export default function SongSearch() {
         });
     }
 
-
+    // handles playing/pausing the preview audio file
     function handlePreview(song: Song) {
         if (!song.preview) return;
 

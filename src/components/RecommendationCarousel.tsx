@@ -1,3 +1,5 @@
+// carousel used to display recommendations
+
 "use client";
 
 import useEmblaCarousel from "embla-carousel-react";
